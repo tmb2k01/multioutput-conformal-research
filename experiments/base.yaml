@@ -1,0 +1,48 @@
+name: base
+seeds: [42]
+output_dir: outputs
+dataset:
+  name: synthetic
+  root: data
+  download: true
+  verify_images: true
+  conflict_policy: exclude
+  max_samples: null
+  image_size: 64
+splits:
+  train: 0.50
+  validation: 0.10
+  shape: 0.10
+  calibration: 0.15
+  test: 0.15
+model:
+  name: linear
+training:
+  epochs: 40
+  batch_size: 64
+  learning_rate: 0.05
+  weight_decay: 0.0001
+  device: cpu
+  num_workers: 0
+  num_threads: 2
+  augment: true  # Training-only geometric augmentation for image models.
+conformal:
+  alphas: [0.05, 0.10]
+  methods:
+    - name: marginal
+    - name: bonferroni
+    - name: max_norm
+    - name: mahalanobis
+      params:
+        residual: absolute
+        shrinkage: 0.1
+        ridge: 0.00001
+        center: false
+evaluation:
+  batch_size: 128
+  max_candidates: 100000
+  candidate_batch_size: 256
+  save_prediction_sets: false
+artifacts:
+  save_probabilities: true
+  save_diagnostics: false

@@ -1,0 +1,37 @@
+extends: sgvehicle.yaml
+name: sgvehicle-mahalanobis-ablation
+training:
+  device: auto
+conformal:
+  methods:
+    - name: bonferroni
+    - name: bonferroni
+      label: bonferroni-weighted
+      params:
+        weights: [0.3, 0.7]
+    - name: max_norm
+    - name: mahalanobis
+      label: mahalanobis-absolute
+      params:
+        residual: absolute
+        shrinkage: 0.1
+        ridge: 0.00001
+    - name: mahalanobis
+      label: mahalanobis-diagonal
+      params:
+        residual: absolute
+        shrinkage: 1.0
+        ridge: 0.00001
+    - name: mahalanobis
+      label: mahalanobis-signed
+      params:
+        residual: signed
+        shrinkage: 0.1
+        ridge: 0.00001
+    - name: mahalanobis
+      label: mahalanobis-centered
+      params:
+        residual: signed
+        center: true
+        shrinkage: 0.1
+        ridge: 0.00001

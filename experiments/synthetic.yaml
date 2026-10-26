@@ -1,0 +1,9 @@
+extends: base.yaml
+name: synthetic-dependent
+seeds: [42, 43, 44]
+dataset:
+  name: synthetic
+  n_samples: 4000
+  n_features: 12
+  num_classes: [3, 4, 2]
+  dependence: 0.8

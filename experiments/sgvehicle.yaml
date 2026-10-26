@@ -1,0 +1,14 @@
+extends: base.yaml
+name: sgvehicle
+seeds: [42]
+dataset:
+  name: sgvehicle
+  num_classes: [12, 11]  # Informational; the loader records the observed filename vocabulary.
+  image_size: 64
+model:
+  name: tiny_cnn
+  width: 32
+  pretrained: false
+training:
+  epochs: 20
+  learning_rate: 0.001

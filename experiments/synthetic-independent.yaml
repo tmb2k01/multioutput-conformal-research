@@ -1,0 +1,6 @@
+extends: synthetic.yaml
+name: synthetic-no-shared-noise
+dataset:
+  dependence: 0.0
+# Removes shared latent noise. This does NOT assert unconditional independence
+# of coverage events, since tasks still share observed features and training data.
