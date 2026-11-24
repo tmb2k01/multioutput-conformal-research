@@ -1,5 +1,0 @@
-extends: sgvehicle.yaml
-name: utkface
-dataset:
-  name: utkface
-  num_classes: [2, 5]  # Dataset annotation schema: gender and race.

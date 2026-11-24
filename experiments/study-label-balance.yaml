@@ -1,0 +1,117 @@
+# One complete group in this file. Edit base, then the blocks and cases below.
+# balance.exponent controls p(class) proportional to rank**(-exponent).
+# reverse changes which labels are common; the anchor reuses all seven levels.
+name: label-balance
+title: Label balance with standard conformal prediction
+kind: label_balance
+description: Vary only label priors within each block. Compare homogeneous score laws with fixed class-specific
+  score laws. Reversing priors moves difficult classes between the majority and minority.
+base:
+  seeds:
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  dataset:
+    n_samples: 30000
+    num_classes:
+    - 12
+    - 11
+    task_names:
+    - color
+    - type
+  predictions:
+    accuracy: 0.8
+    error_correlation: 1.0
+    correct_confidence:
+      distribution: beta
+      mean: 0.9
+      concentration: 40
+      low: 0.5
+      high: 1.0
+    incorrect_confidence:
+      distribution: beta
+      mean: 0.9
+      concentration: 40
+      low: 0.5
+      high: 1.0
+    tail_concentration: 1.0
+    true_class_weight: 1.0
+  splits:
+    clustering: 0.2
+    calibration: 0.4
+    test: 0.4
+  conformal:
+    alphas:
+    - 0.05
+    - 0.1
+    - 0.15
+    - 0.2
+    - 0.25
+    methods:
+    - name: standard
+  artifacts:
+    save_probabilities: true
+blocks:
+- name: homogeneous
+  title: Same score law for every class
+  reference: uniform
+  overrides: {}
+  cases: &balance_cases
+  - name: uniform
+    label: Uniform
+    balance:
+      exponent: 0.0
+      reverse: false
+  - name: power-0p5-forward
+    label: Mild, early labels common
+    balance:
+      exponent: 0.5
+      reverse: false
+  - name: power-0p5-reverse
+    label: Mild, late labels common
+    balance:
+      exponent: 0.5
+      reverse: true
+  - name: power-1p0-forward
+    label: Moderate, early labels common
+    balance:
+      exponent: 1.0
+      reverse: false
+  - name: power-1p0-reverse
+    label: Moderate, late labels common
+    balance:
+      exponent: 1.0
+      reverse: true
+  - name: power-2p0-forward
+    label: Severe, early labels common
+    balance:
+      exponent: 2.0
+      reverse: false
+  - name: power-2p0-reverse
+    label: Severe, late labels common
+    balance:
+      exponent: 2.0
+      reverse: true
+- name: class-differences
+  title: Fixed easier and harder class cohorts
+  reference: uniform
+  overrides:
+    predictions:
+      class_profiles:
+      - name: easier-errors
+        class_range:
+        - 0
+        - 66
+        incorrect_confidence:
+          mean: 0.65
+        true_class_weight: 2.0
+      - name: harder-errors
+        class_range:
+        - 66
+        - 132
+        incorrect_confidence:
+          mean: 0.95
+        true_class_weight: 0.5
+  cases: *balance_cases

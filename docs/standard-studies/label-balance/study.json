@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "spec": {
+    "name": "label-balance",
+    "title": "Label balance with standard conformal prediction",
+    "kind": "label_balance",
+    "description": "Vary only label priors within each block. Compare homogeneous score laws with fixed class-specific score laws. Reversing priors moves difficult classes between the majority and minority.",
+    "base": {
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "dataset": {
+        "n_samples": 30000,
+        "num_classes": [
+          12,
+          11
+        ],
+        "task_names": [
+          "color",
+          "type"
+        ]
+      },
+      "predictions": {
+        "accuracy": 0.8,
+        "error_correlation": 1.0,
+        "correct_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "incorrect_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "tail_concentration": 1.0,
+        "true_class_weight": 1.0
+      },
+      "splits": {
+        "clustering": 0.2,
+        "calibration": 0.4,
+        "test": 0.4
+      },
+      "conformal": {
+        "alphas": [
+          0.05,
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        "methods": [
+          {
+            "name": "standard"
+          }
+        ]
+      },
+      "artifacts": {
+        "save_probabilities": true
+      }
+    },
+    "blocks": [
+      {
+        "name": "homogeneous",
+        "title": "Same score law for every class",
+        "reference": "uniform",
+        "overrides": {},
+        "cases": [
+          {
+            "name": "uniform",
+            "label": "Uniform",
+            "balance": {
+              "exponent": 0.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-0p5-forward",
+            "label": "Mild, early labels common",
+            "balance": {
+              "exponent": 0.5,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-0p5-reverse",
+            "label": "Mild, late labels common",
+            "balance": {
+              "exponent": 0.5,
+              "reverse": true
+            }
+          },
+          {
+            "name": "power-1p0-forward",
+            "label": "Moderate, early labels common",
+            "balance": {
+              "exponent": 1.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-1p0-reverse",
+            "label": "Moderate, late labels common",
+            "balance": {
+              "exponent": 1.0,
+              "reverse": true
+            }
+          },
+          {
+            "name": "power-2p0-forward",
+            "label": "Severe, early labels common",
+            "balance": {
+              "exponent": 2.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-2p0-reverse",
+            "label": "Severe, late labels common",
+            "balance": {
+              "exponent": 2.0,
+              "reverse": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "class-differences",
+        "title": "Fixed easier and harder class cohorts",
+        "reference": "uniform",
+        "overrides": {
+          "predictions": {
+            "class_profiles": [
+              {
+                "name": "easier-errors",
+                "class_range": [
+                  0,
+                  66
+                ],
+                "incorrect_confidence": {
+                  "mean": 0.65
+                },
+                "true_class_weight": 2.0
+              },
+              {
+                "name": "harder-errors",
+                "class_range": [
+                  66,
+                  132
+                ],
+                "incorrect_confidence": {
+                  "mean": 0.95
+                },
+                "true_class_weight": 0.5
+              }
+            ]
+          }
+        },
+        "cases": [
+          {
+            "name": "uniform",
+            "label": "Uniform",
+            "balance": {
+              "exponent": 0.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-0p5-forward",
+            "label": "Mild, early labels common",
+            "balance": {
+              "exponent": 0.5,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-0p5-reverse",
+            "label": "Mild, late labels common",
+            "balance": {
+              "exponent": 0.5,
+              "reverse": true
+            }
+          },
+          {
+            "name": "power-1p0-forward",
+            "label": "Moderate, early labels common",
+            "balance": {
+              "exponent": 1.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-1p0-reverse",
+            "label": "Moderate, late labels common",
+            "balance": {
+              "exponent": 1.0,
+              "reverse": true
+            }
+          },
+          {
+            "name": "power-2p0-forward",
+            "label": "Severe, early labels common",
+            "balance": {
+              "exponent": 2.0,
+              "reverse": false
+            }
+          },
+          {
+            "name": "power-2p0-reverse",
+            "label": "Severe, late labels common",
+            "balance": {
+              "exponent": 2.0,
+              "reverse": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [],
+  "created_at_utc": "2026-11-24T07:34:25.087339+00:00",
+  "source_yaml": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/experiments/study-label-balance.yaml",
+  "source_yaml_sha256": "350e19441decfc2b2360162c8090016981b9a59128b2986391d3167b409120de",
+  "runs": [
+    {
+      "block": "homogeneous",
+      "case": "uniform",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-uniform/20261124T073407Z-f7a3eecf"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-0p5-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-0p5-forward/20261124T073408Z-f7e7f746"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-0p5-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-0p5-reverse/20261124T073409Z-0b581187"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-1p0-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-1p0-forward/20261124T073411Z-8e941fda"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-1p0-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-1p0-reverse/20261124T073412Z-0221ee3c"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-2p0-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-2p0-forward/20261124T073413Z-b93c3e80"
+    },
+    {
+      "block": "homogeneous",
+      "case": "power-2p0-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/homogeneous-power-2p0-reverse/20261124T073415Z-8f8c15ef"
+    },
+    {
+      "block": "class-differences",
+      "case": "uniform",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-uniform/20261124T073416Z-bd5b46f2"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-0p5-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-0p5-forward/20261124T073417Z-f06f523c"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-0p5-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-0p5-reverse/20261124T073418Z-96aefa09"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-1p0-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-1p0-forward/20261124T073420Z-0b9b2dbf"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-1p0-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-1p0-reverse/20261124T073421Z-18dacadd"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-2p0-forward",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-2p0-forward/20261124T073422Z-3df50119"
+    },
+    {
+      "block": "class-differences",
+      "case": "power-2p0-reverse",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/label-balance/class-differences-power-2p0-reverse/20261124T073423Z-0d076519"
+    }
+  ]
+}

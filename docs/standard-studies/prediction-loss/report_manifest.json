@@ -1,0 +1,9 @@
+{
+  "study_sha256": "9a5bad84d4dcc7a9b3f8a65762066c48349947ae92bb7c7a2d3fc64005583d6b",
+  "comparison_sha256": "688bb8e6d4d6e9abf5196c7d2d3c9ac029cf36cbe5511ef975329fae2fe0f522",
+  "report_source_sha256": "b56e01d48f799a1d111a96694886bf9cbd425e4acfd8dad7326c924553ebcee5",
+  "method": "standard",
+  "n_cases": 17,
+  "n_rows": 425,
+  "n_figures": 8
+}

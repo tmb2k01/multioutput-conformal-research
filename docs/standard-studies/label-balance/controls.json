@@ -1,0 +1,11 @@
+{
+  "all_splits_checked": [
+    "clustering",
+    "calibration",
+    "test"
+  ],
+  "exact_correctness_patterns_matched": true,
+  "exact_labels_and_argmax_matched": false,
+  "exact_probabilities_matched": false,
+  "audit": "Fixed balanced reference test per block/seed; not population coverage"
+}

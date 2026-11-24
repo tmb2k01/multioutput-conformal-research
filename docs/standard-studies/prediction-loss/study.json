@@ -1,0 +1,412 @@
+{
+  "schema_version": 1,
+  "spec": {
+    "name": "prediction-loss",
+    "title": "Same accuracy, different prediction loss",
+    "kind": "prediction_loss",
+    "description": "Labels and argmax predictions must match exactly across every case, block, split and seed. Change cross-entropy through error confidence, probability assigned to the true label on errors, or class-localized error confidence.",
+    "base": {
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "dataset": {
+        "n_samples": 30000,
+        "num_classes": [
+          12,
+          11
+        ],
+        "task_names": [
+          "color",
+          "type"
+        ]
+      },
+      "predictions": {
+        "accuracy": 0.8,
+        "error_correlation": 1.0,
+        "correct_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "incorrect_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "tail_concentration": 1.0,
+        "true_class_weight": 1.0
+      },
+      "splits": {
+        "clustering": 0.2,
+        "calibration": 0.4,
+        "test": 0.4
+      },
+      "conformal": {
+        "alphas": [
+          0.05,
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        "methods": [
+          {
+            "name": "standard"
+          }
+        ]
+      },
+      "artifacts": {
+        "save_probabilities": true
+      }
+    },
+    "blocks": [
+      {
+        "name": "confidence",
+        "title": "Vary confidence on wrong predictions",
+        "reference": "confidence-0p9",
+        "cases": [
+          {
+            "name": "confidence-0p55",
+            "label": "Error confidence 0.55",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.55
+                }
+              }
+            }
+          },
+          {
+            "name": "confidence-0p65",
+            "label": "Error confidence 0.65",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.65
+                }
+              }
+            }
+          },
+          {
+            "name": "confidence-0p75",
+            "label": "Error confidence 0.75",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.75
+                }
+              }
+            }
+          },
+          {
+            "name": "confidence-0p85",
+            "label": "Error confidence 0.85",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.85
+                }
+              }
+            }
+          },
+          {
+            "name": "confidence-0p9",
+            "label": "Error confidence 0.9",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.9
+                }
+              }
+            }
+          },
+          {
+            "name": "confidence-0p97",
+            "label": "Error confidence 0.97",
+            "overrides": {
+              "predictions": {
+                "incorrect_confidence": {
+                  "mean": 0.97
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "true-label-tail",
+        "title": "Vary the true label probability on errors",
+        "reference": "tail-1p0",
+        "cases": [
+          {
+            "name": "tail-0p25",
+            "label": "True-label weight 0.25",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 0.25
+              }
+            }
+          },
+          {
+            "name": "tail-0p5",
+            "label": "True-label weight 0.5",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 0.5
+              }
+            }
+          },
+          {
+            "name": "tail-1p0",
+            "label": "True-label weight 1",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 1.0
+              }
+            }
+          },
+          {
+            "name": "tail-2p0",
+            "label": "True-label weight 2",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 2.0
+              }
+            }
+          },
+          {
+            "name": "tail-4p0",
+            "label": "True-label weight 4",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 4.0
+              }
+            }
+          },
+          {
+            "name": "tail-8p0",
+            "label": "True-label weight 8",
+            "overrides": {
+              "predictions": {
+                "true_class_weight": 8.0
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "localized-loss",
+        "title": "Concentrate larger loss in half the classes",
+        "reference": "localized-0p65",
+        "overrides": {
+          "predictions": {
+            "incorrect_confidence": {
+              "mean": 0.65
+            }
+          }
+        },
+        "cases": [
+          {
+            "name": "localized-0p65",
+            "label": "Hard-cohort confidence 0.65",
+            "overrides": {
+              "predictions": {
+                "class_profiles": [
+                  {
+                    "name": "localized-errors",
+                    "class_range": [
+                      66,
+                      132
+                    ],
+                    "incorrect_confidence": {
+                      "mean": 0.65
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "localized-0p75",
+            "label": "Hard-cohort confidence 0.75",
+            "overrides": {
+              "predictions": {
+                "class_profiles": [
+                  {
+                    "name": "localized-errors",
+                    "class_range": [
+                      66,
+                      132
+                    ],
+                    "incorrect_confidence": {
+                      "mean": 0.75
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "localized-0p85",
+            "label": "Hard-cohort confidence 0.85",
+            "overrides": {
+              "predictions": {
+                "class_profiles": [
+                  {
+                    "name": "localized-errors",
+                    "class_range": [
+                      66,
+                      132
+                    ],
+                    "incorrect_confidence": {
+                      "mean": 0.85
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "localized-0p9",
+            "label": "Hard-cohort confidence 0.9",
+            "overrides": {
+              "predictions": {
+                "class_profiles": [
+                  {
+                    "name": "localized-errors",
+                    "class_range": [
+                      66,
+                      132
+                    ],
+                    "incorrect_confidence": {
+                      "mean": 0.9
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "localized-0p97",
+            "label": "Hard-cohort confidence 0.97",
+            "overrides": {
+              "predictions": {
+                "class_profiles": [
+                  {
+                    "name": "localized-errors",
+                    "class_range": [
+                      66,
+                      132
+                    ],
+                    "incorrect_confidence": {
+                      "mean": 0.97
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [],
+  "created_at_utc": "2026-11-24T07:34:28.787131+00:00",
+  "source_yaml": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/experiments/study-prediction-loss.yaml",
+  "source_yaml_sha256": "e9ff2d87897e507b3dd1f86f5b9161f6d7933aceae5b23f3a133107edacc5706",
+  "runs": [
+    {
+      "block": "confidence",
+      "case": "confidence-0p55",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p55/20261124T073407Z-24b1fed5"
+    },
+    {
+      "block": "confidence",
+      "case": "confidence-0p65",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p65/20261124T073408Z-33dd46f6"
+    },
+    {
+      "block": "confidence",
+      "case": "confidence-0p75",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p75/20261124T073409Z-e3b0dbbe"
+    },
+    {
+      "block": "confidence",
+      "case": "confidence-0p85",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p85/20261124T073411Z-17c7e4c2"
+    },
+    {
+      "block": "confidence",
+      "case": "confidence-0p9",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p9/20261124T073412Z-99af2b68"
+    },
+    {
+      "block": "confidence",
+      "case": "confidence-0p97",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/confidence-confidence-0p97/20261124T073413Z-4d837c37"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-0p25",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-0p25/20261124T073415Z-9563de77"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-0p5",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-0p5/20261124T073416Z-ed7f48b8"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-1p0",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-1p0/20261124T073417Z-c16aa8dd"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-2p0",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-2p0/20261124T073418Z-a44a23c8"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-4p0",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-4p0/20261124T073420Z-ed2311e4"
+    },
+    {
+      "block": "true-label-tail",
+      "case": "tail-8p0",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/true-label-tail-tail-8p0/20261124T073421Z-88f381ab"
+    },
+    {
+      "block": "localized-loss",
+      "case": "localized-0p65",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/localized-loss-localized-0p65/20261124T073422Z-1671694d"
+    },
+    {
+      "block": "localized-loss",
+      "case": "localized-0p75",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/localized-loss-localized-0p75/20261124T073423Z-d4c209d7"
+    },
+    {
+      "block": "localized-loss",
+      "case": "localized-0p85",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/localized-loss-localized-0p85/20261124T073425Z-5f8012a4"
+    },
+    {
+      "block": "localized-loss",
+      "case": "localized-0p9",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/localized-loss-localized-0p9/20261124T073426Z-850a5dae"
+    },
+    {
+      "block": "localized-loss",
+      "case": "localized-0p97",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/prediction-loss/localized-loss-localized-0p97/20261124T073427Z-a748aa6d"
+    }
+  ]
+}

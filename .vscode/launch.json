@@ -1,0 +1,142 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Standard studies: choose group",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "study",
+        "${input:studyGroup}"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Standard studies: active group YAML",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "study",
+        "${file}"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Standard studies: validate group",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "study",
+        "${input:studyGroup}",
+        "--check"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Synthetic: choose experiment",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "run",
+        "${input:experiment}"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Synthetic: run active YAML",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "run",
+        "${file}"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Synthetic: smoke run",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "run",
+        "experiments/synthetic-smoke.yaml"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Synthetic: validate experiment",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "check-config",
+        "${input:experiment}"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Synthetic: plots and report",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "report"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "studyGroup",
+      "type": "pickString",
+      "description": "Controlled standard-conformal group",
+      "default": "experiments/study-label-balance.yaml",
+      "options": [
+        "experiments/study-label-balance.yaml",
+        "experiments/study-prediction-loss.yaml",
+        "experiments/study-calibration-size.yaml"
+      ]
+    },
+    {
+      "id": "experiment",
+      "type": "pickString",
+      "description": "Synthetic prediction scenario",
+      "default": "experiments/synthetic.yaml",
+      "options": [
+        "experiments/synthetic.yaml",
+        "experiments/synthetic-uncertain-errors.yaml",
+        "experiments/synthetic-broad-confidence.yaml",
+        "experiments/synthetic-uniform-confidence.yaml",
+        "experiments/synthetic-constant-confidence.yaml",
+        "experiments/synthetic-underconfident-correct.yaml",
+        "experiments/synthetic-class-profiles.yaml",
+        "experiments/synthetic-class-accuracy.yaml",
+        "experiments/synthetic-imbalanced.yaml",
+        "experiments/synthetic-independent-errors.yaml",
+        "experiments/synthetic-small-dimensions.yaml",
+        "experiments/synthetic-smoke.yaml"
+      ]
+    }
+  ]
+}

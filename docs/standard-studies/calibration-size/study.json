@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "spec": {
+    "name": "calibration-size",
+    "title": "Calibration sample size with fixed predictions",
+    "kind": "calibration_size",
+    "description": "Hold every probability vector and test example fixed; calibrate on nested prefixes of the same 12,000-example calibration pool. This separates calibration variability from model quality.",
+    "base": {
+      "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+      ],
+      "dataset": {
+        "n_samples": 30000,
+        "num_classes": [
+          12,
+          11
+        ],
+        "task_names": [
+          "color",
+          "type"
+        ]
+      },
+      "predictions": {
+        "accuracy": 0.8,
+        "error_correlation": 1.0,
+        "correct_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "incorrect_confidence": {
+          "distribution": "beta",
+          "mean": 0.9,
+          "concentration": 40,
+          "low": 0.5,
+          "high": 1.0
+        },
+        "tail_concentration": 1.0,
+        "true_class_weight": 1.0
+      },
+      "splits": {
+        "clustering": 0.2,
+        "calibration": 0.4,
+        "test": 0.4
+      },
+      "conformal": {
+        "alphas": [
+          0.05,
+          0.1,
+          0.15,
+          0.2,
+          0.25
+        ],
+        "methods": [
+          {
+            "name": "standard"
+          }
+        ]
+      },
+      "artifacts": {
+        "save_probabilities": true
+      }
+    },
+    "blocks": [
+      {
+        "name": "budget",
+        "title": "Nested calibration budgets",
+        "reference": "n-12000",
+        "cases": [
+          {
+            "name": "n-100",
+            "label": "100 calibration examples",
+            "overrides": {
+              "conformal": {
+                "calibration_samples": 100
+              }
+            }
+          },
+          {
+            "name": "n-500",
+            "label": "500 calibration examples",
+            "overrides": {
+              "conformal": {
+                "calibration_samples": 500
+              }
+            }
+          },
+          {
+            "name": "n-2000",
+            "label": "2,000 calibration examples",
+            "overrides": {
+              "conformal": {
+                "calibration_samples": 2000
+              }
+            }
+          },
+          {
+            "name": "n-6000",
+            "label": "6,000 calibration examples",
+            "overrides": {
+              "conformal": {
+                "calibration_samples": 6000
+              }
+            }
+          },
+          {
+            "name": "n-12000",
+            "label": "12,000 calibration examples",
+            "overrides": {
+              "conformal": {
+                "calibration_samples": 12000
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [],
+  "created_at_utc": "2026-11-24T07:34:13.649165+00:00",
+  "source_yaml": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/experiments/study-calibration-size.yaml",
+  "source_yaml_sha256": "79091f778f232f2e6eb2f655cfbab00206a85af793681c9476350e562c410aa5",
+  "runs": [
+    {
+      "block": "budget",
+      "case": "n-100",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/calibration-size/budget-n-100/20261124T073407Z-5d9519c4"
+    },
+    {
+      "block": "budget",
+      "case": "n-500",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/calibration-size/budget-n-500/20261124T073408Z-59dbdf3e"
+    },
+    {
+      "block": "budget",
+      "case": "n-2000",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/calibration-size/budget-n-2000/20261124T073409Z-82cd4083"
+    },
+    {
+      "block": "budget",
+      "case": "n-6000",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/calibration-size/budget-n-6000/20261124T073411Z-fddaed0d"
+    },
+    {
+      "block": "budget",
+      "case": "n-12000",
+      "run": "/home/ad.adasworks.com/marcell.toth/University/multioutput-conformal-research/outputs/calibration-size/budget-n-12000/20261124T073412Z-0c6b198b"
+    }
+  ]
+}

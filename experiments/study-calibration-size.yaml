@@ -1,0 +1,83 @@
+# One complete group in this file. Edit base, then the blocks and cases below.
+name: calibration-size
+title: Calibration sample size with fixed predictions
+kind: calibration_size
+description: Hold every probability vector and test example fixed; calibrate on nested prefixes of the
+  same 12,000-example calibration pool. This separates calibration variability from model quality.
+base:
+  seeds:
+  - 42
+  - 43
+  - 44
+  - 45
+  - 46
+  dataset:
+    n_samples: 30000
+    num_classes:
+    - 12
+    - 11
+    task_names:
+    - color
+    - type
+  predictions:
+    accuracy: 0.8
+    error_correlation: 1.0
+    correct_confidence:
+      distribution: beta
+      mean: 0.9
+      concentration: 40
+      low: 0.5
+      high: 1.0
+    incorrect_confidence:
+      distribution: beta
+      mean: 0.9
+      concentration: 40
+      low: 0.5
+      high: 1.0
+    tail_concentration: 1.0
+    true_class_weight: 1.0
+  splits:
+    clustering: 0.2
+    calibration: 0.4
+    test: 0.4
+  conformal:
+    alphas:
+    - 0.05
+    - 0.1
+    - 0.15
+    - 0.2
+    - 0.25
+    methods:
+    - name: standard
+  artifacts:
+    save_probabilities: true
+blocks:
+- name: budget
+  title: Nested calibration budgets
+  reference: n-12000
+  cases:
+  - name: n-100
+    label: 100 calibration examples
+    overrides:
+      conformal:
+        calibration_samples: 100
+  - name: n-500
+    label: 500 calibration examples
+    overrides:
+      conformal:
+        calibration_samples: 500
+  - name: n-2000
+    label: 2,000 calibration examples
+    overrides:
+      conformal:
+        calibration_samples: 2000
+  - name: n-6000
+    label: 6,000 calibration examples
+    overrides:
+      conformal:
+        calibration_samples: 6000
+  - name: n-12000
+    label: 12,000 calibration examples
+    overrides:
+      conformal:
+        calibration_samples: 12000

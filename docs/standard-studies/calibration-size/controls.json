@@ -1,0 +1,11 @@
+{
+  "all_splits_checked": [
+    "clustering",
+    "calibration",
+    "test"
+  ],
+  "exact_correctness_patterns_matched": true,
+  "exact_labels_and_argmax_matched": true,
+  "exact_probabilities_matched": true,
+  "audit": null
+}
